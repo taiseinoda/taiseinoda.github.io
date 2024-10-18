@@ -8,7 +8,7 @@
 
 # Basic Site Settings
 locale                   : "en-US"
-title                    : "Taisei Noda's Homepage"
+title                    : "Taisei Noda"
 title_separator          : "-"
 name                     : &name "Taisei Noda"
 description              : &description "PhD Candidate in Economics"
