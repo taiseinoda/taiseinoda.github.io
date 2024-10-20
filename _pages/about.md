@@ -7,5 +7,5 @@ redirect_from:
   - /about.html
 ---
 
-I'm a Ph.D Candidate at [Department of Economics Rice University]("https://economics.rice.edu").
+I'm a Ph.D Candidate at [Department of Economics Rice University](https://economics.rice.edu).
 
