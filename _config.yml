@@ -8,7 +8,7 @@
 
 # Basic Site Settings
 locale                   : "en-US"
-title                    : "Taisei Noda / Webpage"
+title                    : "Taisei Noda"
 title_separator          : "-"
 name                     : &name "Taisei Noda"
 description              : &description "personal description"
