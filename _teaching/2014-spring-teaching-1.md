@@ -10,7 +10,4 @@ location: ""
 
 ### Slides
 
-[Session 1](Stata_Workshop_2019_Day1.pdf)
-[Session 2](Stata_Workshop_2019_Day2.pdf)
-
 Do files and sample dataset for this course are available in Here(https://github.com/taiseinoda/StataWorkshop).
