@@ -3,7 +3,7 @@ title: "Stata Workshop"
 collection: teaching
 type: "Graduate"
 permalink: /teaching/stataworkshop
-venue: "Osaka University"
+venue: "Osaka University, OSIPP"
 date: 2019-06-01
 location: ""
 ---
