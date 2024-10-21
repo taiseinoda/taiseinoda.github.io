@@ -7,7 +7,9 @@ redirect_from:
   - /about.html
 ---
 
-I'm a Ph.D Candidate at [Department of Economics Rice University](https://economics.rice.edu). My research interests include Financial Economics, Empirical Industrial Organization, and Applied Microeconomics. My recent work focuses on the industrial organization of financial markets, such as mutual funds and IPO underwriting, using structural estimation approaches. Please contact me at taisei.noda(at)rice.edu.
+I'm a Ph.D Candidate at [Department of Economics Rice University](https://economics.rice.edu). My research interests include Financial Economics, Empirical Industrial Organization, and Applied Microeconomics. My recent work focuses on the industrial organization of financial markets, such as mutual funds and IPO underwriting, using structural estimation approaches. 
+
+Please contact me at taisei.noda(at)rice.edu.
 
 ### Job Market Paper
 
