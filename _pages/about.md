@@ -23,3 +23,5 @@ companies as multi-product producers, it considers strategic pricing and cost sy
 both fund types. Results show that multi-product families set higher fees by internalizing competition
 within the family, raising fees by 1–2 basis points, but cost synergies reduce fees by 35 basis points for
 active funds and 5 for passive funds.
+
+[html](/files/google2fb92a0a8d702506.html)
