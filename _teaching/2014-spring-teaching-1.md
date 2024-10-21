@@ -4,13 +4,13 @@ collection: teaching
 type: "Graduate course"
 permalink: /teaching/stataworkshop
 venue: "Osaka University"
-date: 2018-06-01
+date: 2019-06
 location: ""
 ---
 
 ### Slides
 
-[Session 1]
-[Session 2]
+[Session 1](Stata_Workshop_2019_Day1.pdf)
+[Session 2](Stata_Workshop_2019_Day2.pdf)
 
-### Do-files
+Do files and sample dataset for this course are available in Here(https://github.com/taiseinoda/StataWorkshop).
