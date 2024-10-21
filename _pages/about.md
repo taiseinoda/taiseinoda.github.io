@@ -24,4 +24,4 @@ both fund types. Results show that multi-product families set higher fees by int
 within the family, raising fees by 1–2 basis points, but cost synergies reduce fees by 35 basis points for
 active funds and 5 for passive funds.
 
-[html](/files/google2fb92a0a8d702506.html)
+[html](/google2fb92a0a8d702506.html)
