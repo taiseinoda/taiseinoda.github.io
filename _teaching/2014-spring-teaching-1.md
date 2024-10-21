@@ -1,7 +1,7 @@
 ---
 title: "Stata Workshop"
 collection: teaching
-type: "Graduate course"
+type: "Graduate"
 permalink: /teaching/stataworkshop
 venue: "Osaka University"
 date: 2019-06-01
