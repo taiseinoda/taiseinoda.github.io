@@ -1,20 +1,16 @@
 ---
-title: "Teaching experience 1"
+title: "Stata Workshop"
 collection: teaching
-type: "Undergraduate course"
-permalink: /teaching/2014-spring-teaching-1
-venue: "University 1, Department"
-date: 2014-01-01
-location: "City, Country"
+type: "Graduate course"
+permalink: /teaching/stataworkshop
+venue: "Osaka University"
+date: 2018-06-01
+location: ""
 ---
 
-This is a description of a teaching experience. You can use markdown like any other post.
+### Slides
 
-Heading 1
-======
+[Session 1]
+[Session 2]
 
-Heading 2
-======
-
-Heading 3
-======
+### Do-files
