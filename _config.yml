@@ -77,9 +77,9 @@ author:
 publication_category:
   books:
     title: 'Books'
-  manuscripts:
+  publications:
     title: 'Peer-reviewed Journal'    
-  conferences:
+  workingpapers:
     title: 'Working Papgers'
 
 # Site Settings
