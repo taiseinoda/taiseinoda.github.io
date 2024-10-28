@@ -80,7 +80,7 @@ publication_category:
   publications:
     title: 'Peer-reviewed Journal'    
   workingpapers:
-    title: 'Working Papgers'
+    title: 'Working Papers'
 
 # Site Settings
 teaser                   :  # filename of teaser fallback teaser image placed in /images/, .e.g. "500x300.png"
@@ -129,7 +129,7 @@ yandex_site_verification :
 
 # Social Sharing
 twitter:
-  username               : &twitter
+  username               :
 facebook:
   username               :
   app_id                 :
