@@ -17,11 +17,11 @@ Please contact me at taisei.noda(at)rice.edu.
 
 **Abstract**
 
-This paper examines how the rise of passive funds, such as index funds and ETFs, im-
-pacts price competition in the mutual fund industry using structural demand and sup-
-ply estimation. Modeling mutual fund companies as multi-product producers—offering
-both active and passive funds—it incorporates strategic pricing and scale and scope
-economies. Results show that multi-product families raise fees by 1 to 1.5 basis points
-by internalizing competition, while scope economies reduce fees by 4.2 basis points for
-active funds and 27 basis points for passive funds. These findings highlight the nuanced
-effects of multi-product pricing on equilibrium fees.
+This paper examines how the rise of passive funds, such as index funds and ETFs,
+impacts price competition in the mutual fund industry through structural demand and
+supply estimation. Modeling mutual fund companies as multi-product producers offer-
+ing active and passive funds, the analysis incorporates strategic pricing and economies
+of scale and scope. Results indicate that multi-product families raise fees by 1 to 1.5
+basis points through competition internalization, while scope economies lower fees by
+4.2 basis points for active funds and 27 for passive funds. A counterfactual merger
+analysis reveals price increases from market power outweigh cost-efficiency benefits.
