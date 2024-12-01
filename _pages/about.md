@@ -13,13 +13,15 @@ Please contact me at taisei.noda(at)rice.edu.
 
 ### Job Market Paper
 
-[Cannibalization and Scope Economies within Fund Families: The Impact of Passive Investing on Active Fund Fees](https://www.dropbox.com/scl/fi/3wi2njy8vkb0r5ojkf6nk/mf_demand_writing_20241007.pdf?rlkey=eir4uaf9lspbsrtlg5r5fkly1&st=l8g7tt14&dl=0)
+[Cannibalization and Scope Economies within Fund Families: The Impact of Passive Investing on Active Fund Fees](https://www.dropbox.com/scl/fi/dlk9gc5bw2nphrhinrpwn/mf_demand_writing.pdf?rlkey=hn1g93sdk6iz6amk0s6grkd4t&st=5rx291qx&dl=0)
 
 **Abstract**
 
- This paper analyzes how the rise of passive funds, such as index funds and ETFs, affects price
-competition in the mutual fund industry using structural demand estimation. Modeling mutual fund
-companies as multi-product producers, it considers strategic pricing and cost synergies from managing
-both fund types. Results show that multi-product families set higher fees by internalizing competition
-within the family, raising fees by 1–2 basis points, but cost synergies reduce fees by 35 basis points for
-active funds and 5 for passive funds.
+This paper examines how the rise of passive funds, such as index funds and ETFs, im-
+pacts price competition in the mutual fund industry using structural demand and sup-
+ply estimation. Modeling mutual fund companies as multi-product producers—offering
+both active and passive funds—it incorporates strategic pricing and scale and scope
+economies. Results show that multi-product families raise fees by 1 to 1.5 basis points
+by internalizing competition, while scope economies reduce fees by 4.2 basis points for
+active funds and 27 basis points for passive funds. These findings highlight the nuanced
+effects of multi-product pricing on equilibrium fees.
