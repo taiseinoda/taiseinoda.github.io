@@ -7,13 +7,13 @@ redirect_from:
   - /about.html
 ---
 
-I'm a Ph.D Candidate at [Department of Economics Rice University](https://economics.rice.edu). My research interests include Financial Economics, Empirical Industrial Organization, and Applied Microeconomics. My recent work focuses on the industrial organization of financial markets, such as mutual funds and IPO underwriting, using structural estimation approaches. 
+I'm an assistant professor at [Department of Economics Nagoya University of Commerse and Business](https://www.nucba.ac.jp/en/). My research interests include Financial Economics, Empirical Industrial Organization, and Applied Microeconomics. My recent work focuses on the industrial organization of financial markets, such as mutual funds and IPO underwriting, using structural estimation approaches. 
 
 Please contact me at taisei.noda(at)rice.edu.
 
 ### Job Market Paper
 
-[Cannibalization and Scope Economies within Fund Families: The Impact of Passive Investing on Active Fund Fees](https://www.dropbox.com/scl/fi/dlk9gc5bw2nphrhinrpwn/mf_demand_writing.pdf?rlkey=hn1g93sdk6iz6amk0s6grkd4t&st=5rx291qx&dl=0)
+[Cannibalization and Scope Economies within Fund Families: The Impact of Passive Investing on Fund Fees](https://www.dropbox.com/scl/fi/dlk9gc5bw2nphrhinrpwn/mf_demand_writing.pdf?rlkey=hn1g93sdk6iz6amk0s6grkd4t&st=5rx291qx&dl=0)
 
 **Abstract**
 
