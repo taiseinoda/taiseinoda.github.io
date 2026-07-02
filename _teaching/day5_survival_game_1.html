@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>百貨店経営 生存ゲーム</title>
+<style>
+  :root{
+    --paper:#EEF0F2;--panel:#FFFFFF;--ink:#1C2733;--muted:#5C6773;--line:#D5DAE0;
+    --brand:#1F4E79;--brand-ink:#12365A;--grow:#2F8F5B;--grow-bg:#E7F3EC;--over:#C98A1B;--over-bg:#FBF2DE;
+    --cold:#B23A2E;--cold-bg:#F7E6E3;--chip:#EDF1F6;--gold:#C79A24;
+    --mono:"Roboto Mono","SFMono-Regular",ui-monospace,Menlo,Consolas,monospace;
+    --jp:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic","Meiryo",system-ui,sans-serif;}
+  *{box-sizing:border-box}html,body{margin:0}
+  body{background:var(--paper);color:var(--ink);font-family:var(--jp);line-height:1.6;-webkit-font-smoothing:antialiased;padding:0 16px 60px}
+  .wrap{max-width:1080px;margin:0 auto}
+  h1{font-size:22px;font-weight:800;margin:0}.sub{color:var(--muted);font-size:13px;margin-top:2px}
+  header{padding:22px 0 14px;border-bottom:2px solid var(--ink);margin-bottom:18px}
+  .head-row{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+  .yearbadge{font-family:var(--mono);font-weight:700;font-size:14px;background:var(--ink);color:#fff;padding:4px 12px;border-radius:2px;white-space:nowrap}
+  .timeline{display:flex;gap:4px;margin-top:14px}
+  .tl{flex:1;text-align:center;padding:8px 2px;border-radius:3px;background:var(--chip);border:1px solid transparent}
+  .tl .n{font-family:var(--mono);font-weight:700;font-size:14px;color:var(--ink)}
+  .tl.done{background:#fff;border-color:var(--line)}.tl.now{background:var(--brand);border-color:var(--brand)}.tl.now .n{color:#fff}.tl.future .n{color:#AEB6BF}
+  .board{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+  .co{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px 14px}
+  .co.you{border:2px solid var(--brand)}.co.lead{box-shadow:0 0 0 2px var(--gold) inset}.co.dead{opacity:.5}
+  .co .name{font-weight:800;font-size:14px;display:flex;justify-content:space-between;align-items:center;gap:6px}
+  .rankchip{font-family:var(--mono);font-size:11px;font-weight:700;background:var(--chip);color:var(--muted);border-radius:10px;padding:1px 8px}
+  .rolelab{font-size:10px;color:var(--muted);font-weight:600;margin-left:6px}
+  .rankchip.r1{background:var(--gold);color:#fff}.crown{color:var(--gold);font-size:12px;font-weight:800}
+  .badge-dead{background:var(--cold);color:#fff;font-size:11px;padding:1px 7px;border-radius:10px}
+  .metrics{display:grid;grid-template-columns:1fr 1fr;gap:2px 12px;margin-top:8px;font-size:12px}
+  .metrics .k{color:var(--muted)}.metrics .v{text-align:right;font-family:var(--mono);font-weight:600}
+  .hype{border-radius:6px;padding:9px 13px;margin-bottom:16px;font-size:13px}
+  .hype.gold{background:linear-gradient(90deg,#FBF2DE,#fff);border:1px solid var(--gold);border-left:4px solid var(--gold)}
+  .hype.gold b{color:#9A7A1C}
+  .hype.shock{background:var(--cold-bg);border:1px solid var(--cold);border-left:4px solid var(--cold)}
+  .hype.shock b{color:var(--cold)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:820px){.grid2{grid-template-columns:1fr}.board{grid-template-columns:1fr}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:16px}
+  .card h2{font-size:13px;letter-spacing:.06em;margin:0 0 12px;color:var(--brand-ink);font-weight:800;border-bottom:1px solid var(--line);padding-bottom:8px}
+  .news{background:var(--ink);color:#fff;border-radius:5px;padding:10px 13px;margin-bottom:12px;font-size:13.5px}
+  .news .lbl{font-size:10px;letter-spacing:.14em;color:#9BB0C4;display:block;margin-bottom:2px}
+  .ind{display:flex;justify-content:space-between;align-items:baseline;padding:6px 0;border-bottom:1px dotted var(--line);font-size:13px}
+  .ind:last-child{border-bottom:none}.ind .lab{display:flex;align-items:center;gap:7px}
+  .tagdot{font-size:10px;font-weight:700;width:18px;height:18px;line-height:18px;text-align:center;border-radius:3px;color:#fff}
+  .tA{background:var(--grow)}.tB{background:var(--over)}.tC{background:var(--brand)}.tD{background:var(--muted)}
+  .ind .val{font-family:var(--mono);font-weight:700}.up{color:var(--grow)}.down{color:var(--cold)}.warn{color:var(--over)}
+  .moreBtn{margin-top:10px;margin-right:14px;font-size:12px;color:var(--brand);background:none;border:none;cursor:pointer;padding:0;text-decoration:underline}
+  .charts{margin-top:12px;display:none}.charts.show{display:block}
+  .chartbox{margin-bottom:8px}.chartbox .ct{font-size:11px;color:var(--muted);margin-bottom:1px}
+  .street{margin-top:12px;padding:10px 12px;background:var(--chip);border-left:3px solid var(--muted);font-size:12.5px;border-radius:0 4px 4px 0}
+  .street b{color:var(--ink)}
+  .fore{display:flex;gap:6px;margin-bottom:16px}
+  .fore button{flex:1;font-family:var(--jp);font-size:12px;padding:8px 4px;border:1px solid var(--line);background:#fff;border-radius:4px;cursor:pointer;font-weight:700;color:var(--muted)}
+  .fore button.sel{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .flabel{font-size:12px;color:var(--muted);margin-bottom:6px}
+  .strat{border:1px solid var(--line);border-radius:6px;padding:10px 12px;margin-bottom:8px;cursor:pointer;transition:border-color .12s,background .12s}
+  .strat:hover{border-color:var(--brand)}.strat.sel{border:2px solid var(--brand);background:#F5F9FD;padding:9px 11px}
+  .strat .top{display:flex;justify-content:space-between;align-items:center}.strat .nm{font-weight:800;font-size:14px}
+  .strat .agg{font-size:10px;font-family:var(--mono);color:var(--muted)}.strat .desc{font-size:11.5px;color:var(--muted);margin-top:2px}
+  .preview{background:#FAFBFC;border:1px solid var(--line);border-radius:6px;padding:11px 13px;margin:12px 0;font-size:12px}
+  .preview h3{margin:0 0 7px;font-size:11px;letter-spacing:.05em;color:var(--muted);font-weight:700}
+  .prow{display:flex;justify-content:space-between;padding:2px 0}.prow .pv{font-family:var(--mono);font-weight:700}
+  .exitline{margin-top:8px;padding-top:7px;border-top:1px dashed var(--line);font-size:11.5px;color:var(--muted)}
+  .forcerow{display:flex;justify-content:space-between;align-items:center;margin-top:6px;padding:7px 10px;background:#fff;border:1px solid var(--line);border-radius:5px;font-size:12px}
+  .forcerow .fv{font-family:var(--mono);font-weight:800;font-size:16px}
+  .f-green{color:var(--grow)}.f-amber{color:var(--over)}.f-red{color:var(--cold)}
+  .danger{color:var(--cold);font-weight:700}
+  .btn{width:100%;background:var(--brand);color:#fff;border:none;padding:12px;border-radius:6px;font-family:var(--jp);font-weight:800;font-size:15px;cursor:pointer;letter-spacing:.05em}
+  .btn:hover{background:var(--brand-ink)}.btn:disabled{background:#B7C1CC;cursor:not-allowed}
+  .result{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--brand);border-radius:6px;padding:16px;margin-bottom:16px}
+  .result.grow{border-left-color:var(--grow)}.result.cold{border-left-color:var(--cold)}
+  .result h2{margin:0 0 6px;font-size:16px}.result p{margin:4px 0;font-size:13px}.result .delta{font-family:var(--mono);font-weight:700}
+  .final{background:var(--panel);border:2px solid var(--ink);border-radius:8px;padding:22px;margin-bottom:16px}
+  .final h2{margin:0 0 4px;font-size:20px}.scorebig{font-family:var(--mono);font-size:40px;font-weight:800;line-height:1}
+  .scoreparts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0}
+  .sp{background:var(--chip);border-radius:6px;padding:12px;text-align:center}.sp .spv{font-family:var(--mono);font-size:22px;font-weight:800}.sp .spk{font-size:11px;color:var(--muted)}
+  .verdict{padding:12px 14px;border-radius:6px;font-size:13.5px;margin-top:6px}
+  .reveal{margin-top:16px;border-top:1px solid var(--line);padding-top:12px}.reveal h3{font-size:13px;margin:0 0 8px}
+  .rvtable{width:100%;border-collapse:collapse;font-size:12px}.rvtable td,.rvtable th{border:1px solid var(--line);padding:5px 7px;text-align:center}.rvtable th{background:var(--chip)}
+  .cmp{width:100%;border-collapse:collapse;font-size:13px;margin-top:14px}.cmp td,.cmp th{border:1px solid var(--line);padding:6px 10px}.cmp th{background:var(--chip);font-weight:700}.cmp .v{font-family:var(--mono);text-align:right;font-weight:600}
+  .foot{color:var(--muted);font-size:11px;margin-top:22px;text-align:center}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="head-row">
+      <div><h1>百貨店経営　生存ゲーム</h1>
+      <div class="sub">景気の波を8年、渡りきる。予測を当てるゲームではなく、読み違えても倒れないためのゲーム。</div></div>
+      <div class="yearbadge" id="yearBadge">1年目 / 全8年</div>
+    </div>
+    <div class="timeline" id="timeline"></div>
+  </header>
+  <div class="board" id="board"></div>
+  <div id="hypeZone"></div>
+  <div id="resultZone"></div>
+  <div class="grid2" id="playZone">
+    <div class="card">
+      <h2>今年の状況</h2>
+      <div class="news" id="news"></div>
+      <div id="indicators"></div>
+      <button class="moreBtn" id="moreBtn">＋ 指標を詳しく</button>
+      <button class="moreBtn" id="chartBtn">推移をグラフで見る</button>
+      <div class="charts" id="charts"></div>
+      <div class="street" id="street"></div>
+    </div>
+    <div class="card">
+      <h2>来期の景気を、どう見通す？</h2>
+      <div class="fore" id="fore"></div>
+      <h2 style="margin-top:2px">経営判断を選ぶ</h2>
+      <div id="strats"></div>
+      <div class="preview" id="preview"></div>
+      <button class="btn" id="decide" disabled>この方針で決定する</button>
+    </div>
+  </div>
+  <div id="finalZone"></div>
+  <div class="foot">プロトタイプ｜戦略名・A社B社の挙動・数値は調整中の叩き台です。</div>
+</div>
+<script>
+const PHASES=[
+ {yld:0.16,rate:0.025,T:0.90,c:false,fc:"良くなる",news:"新型店が続々開業、小売各社が最高益を更新",
+  existing:"+6.5%",eN:6.5,land:"+8%",lN:8,rateS:"2.5%",rN:2.5,unemp:"求人増",per:"22倍",zaiko:"適正",
+  street:"出店ラッシュで各社が人手不足。新卒採用を増やす動き。"},
+ {yld:0.16,rate:0.025,T:0.85,c:false,fc:"落ち着く",news:"人手不足が深刻、パートの時給が上昇",
+  existing:"+6.0%",eN:6.0,land:"+14%",lN:14,rateS:"2.5%",rN:2.5,unemp:"求人増",per:"30倍",zaiko:"適正",
+  street:"求人倍率が上昇し、賃金も上がってきた。街に活気。"},
+ {yld:0.14,rate:0.025,T:0.55,c:false,fc:"落ち着く",news:"駅前一等地に投資マネー、地価が最高値圏",
+  existing:"+2.5%",eN:2.5,land:"+22%",lN:22,rateS:"2.5%",rN:2.5,unemp:"求人増",per:"45倍",zaiko:"やや増",
+  street:"地価が高騰。出店採算が“将来の値上がり”前提で語られ始めた。既存店の伸びは鈍い。"},
+ {yld:0.12,rate:0.0325,T:0.35,c:false,fc:"悪くなる",news:"日銀、公定歩合を引き上げ ― 過熱を警戒",
+  existing:"+0.5%",eN:0.5,land:"+18%",lN:18,rateS:"3.25%",rN:3.25,unemp:"横ばい",per:"58倍",zaiko:"増",
+  street:"調達環境に変化の兆し。地価はなお高いが、既存店は横ばい。"},
+ {yld:0.00,rate:0.050,T:0.30,c:true,fc:"悪くなる",news:"大手小売、希望退職を募集。金利は5%台へ",
+  existing:"−3.0%",eN:-3,land:"−5%",lN:-5,rateS:"5.0%",rN:5.0,unemp:"求人減",per:"40倍",zaiko:"積み上がり",
+  street:"採用を凍結。一部店舗で早期退職の募集が始まる。"},
+ {yld:-0.03,rate:0.045,T:0.30,c:true,fc:"良くなる",news:"倒産・閉店が相次ぐ、街から求人が消えた",
+  existing:"−6.0%",eN:-6,land:"−15%",lN:-15,rateS:"4.5%",rN:4.5,unemp:"求人消失",per:"28倍",zaiko:"過剰",
+  street:"閉店が相次ぎ、リストラが本格化。連鎖でさらに冷え込む。"},
+ {yld:0.08,rate:0.035,T:0.70,c:false,fc:"良くなる",news:"在庫調整に一巡感、底入れの兆し",
+  existing:"−1.0%",eN:-1,land:"−8%",lN:-8,rateS:"3.5%",rN:3.5,unemp:"わずかに求人",per:"30倍",zaiko:"枯渇へ",
+  street:"過剰在庫が掃け、ぽつぽつと求人が戻り始める。"},
+ {yld:0.13,rate:0.030,T:0.80,c:false,fc:"—",news:"消費に持ち直し、優良立地の争奪が再開",
+  existing:"+3.0%",eN:3,land:"−2%",lN:-2,rateS:"3.0%",rN:3.0,unemp:"求人増",per:"34倍",zaiko:"適正",
+  street:"消費に明るさ。優良立地の争奪戦が再開する。"},
+];
+const INTERNAL=["実需の拡大","実需の拡大・継続","過熱の兆し","過熱・利上げ転換","収縮入り","収縮・谷","回復の入り口","回復"];
+const FIXED=0.03,SOLV=1.5,EVAP=1.25;
+const STRATS=[
+ {id:1,nm:"守り・現金化",agg:"攻め度 1/4",desc:"出店を止め不採算店を閉鎖。借入を返し現金を厚くする。"},
+ {id:2,nm:"身の丈拡張",agg:"攻め度 2/4",desc:"実需を確認できた範囲で、自己資金中心・賃借で堅く出店。"},
+ {id:3,nm:"借入拡張",agg:"攻め度 3/4",desc:"借入を効かせて大きく出店。自社保有も増やす。"},
+ {id:4,nm:"全力・大型一括",agg:"攻め度 4/4",desc:"土地担保で高レバレッジ。大型店を一気に建てる。一度建てると引き返しにくい。"},
+];
+const PMAP={2:[15,0.2],3:[45,0.6],4:[75,0.85]};
+const FORE_OPTS=["さらに良くなる","落ち着く","さらに悪くなる"];
+const FORE_KEY={"さらに良くなる":"良くなる","落ち着く":"落ち着く","さらに悪くなる":"悪くなる"};
+const A_PLAN=[3,3,2,2,1,1,2,3],B_PLAN=[4,4,4,4,4,4,4,4];
+
+function newCo(nm,role){return{nm,role,cash:90,debt:40,K:15,badK:0,profitCum:0,alive:true,evap:false,lp:0,lastBig:false};}
+let you,A,B,yi,selStrat,selFore,showMore,showChart,demandShock,foreHits,bDeadYear,youPlan,foreLog;
+function reset(){you=newCo('みやこ百貨店','あなた');A=newCo('千代田百貨店','堅実');B=newCo('大国百貨店','積極');yi=0;selStrat=null;selFore=null;showMore=false;showChart=false;demandShock=0;foreHits=0;bDeadYear=null;youPlan=[];foreLog=[];}
+reset();
+
+function applyCo(c,sid,ph,y){if(!c.alive)return{r:false,d:false};let r=false;
+ if(ph.c&&!c.evap){c.K=Math.max(3,c.K-c.badK*EVAP);c.badK=0;c.evap=true;}
+ if(sid===1){
+   if(c.lastBig){c.cash-=8;c.debt=Math.max(0,c.debt-4);}else{c.debt=Math.max(0,c.debt-10);}
+   if(c.K>6){c.cash+=6;c.K-=4;} r=true; c.lastBig=false;
+ } else {const P=PMAP[sid];c.cash-=P[0]*(1-P[1]);c.debt+=P[0]*P[1];if(ph.c)c.K+=P[0]*0.2;else{c.K+=P[0];c.badK+=P[0]*(1-ph.T);} c.lastBig=(sid>=3);}
+ const pr=c.K*y-c.debt*ph.rate-c.K*FIXED;c.cash+=pr;c.profitCum+=pr;c.lp=pr;let d=false;
+ if(c.cash<0){c.alive=false;d=true;}if(ph.c&&c.debt>c.K*SOLV){c.alive=false;d=true;}return{r,d};}
+function worldStep(pStrat){const ph=PHASES[yi],y=ph.yld+demandShock;let dist=0,bk=false,bJust=false;
+ const rP=applyCo(you,pStrat,ph,y);if(rP.r)dist+=0.03;if(rP.d)bk=true;
+ const rA=applyCo(A,A_PLAN[yi],ph,y);if(rA.r)dist+=0.10;if(rA.d)bk=true;
+ const rB=applyCo(B,B_PLAN[yi],ph,y);if(rB.r)dist+=0.10;if(rB.d){bk=true;if(bDeadYear===null){bDeadYear=yi;bJust=true;}}
+ if(ph.c)demandShock-=(0.015+0.02*Math.min(1,dist));if(bk)demandShock-=0.06;if(!ph.c)demandShock*=0.55;
+ return{profit:you.lp,bJust};}
+function previewCo(sid){const ph=PHASES[yi],y=ph.yld+demandShock,c=Object.assign({},you);
+ if(ph.c&&!c.evap){c.K=Math.max(3,c.K-c.badK*EVAP);c.badK=0;}
+ if(sid===1){if(c.lastBig){c.cash-=8;c.debt=Math.max(0,c.debt-4);}else{c.debt=Math.max(0,c.debt-10);} if(c.K>6){c.cash+=6;c.K-=4;}}
+ else{const P=PMAP[sid];c.cash-=P[0]*(1-P[1]);c.debt+=P[0]*P[1];if(ph.c)c.K+=P[0]*0.2;else c.K+=P[0];}
+ const pr=c.K*y-c.debt*ph.rate-c.K*FIXED;c.cash+=pr;return c;}
+const yen=n=>(n>=0?"":"−")+Math.abs(n).toFixed(0);
+const cls=v=>v.startsWith('+')?'up':(v.startsWith('−')?'down':'');
+function ranks(){const a=[you,A,B].map(c=>({c,v:c.alive?c.profitCum:-1e9}));a.sort((x,y)=>y.v-x.v);const m=new Map();a.forEach((x,i)=>m.set(x.c,i+1));return m;}
+
+function renderTimeline(){const tl=document.getElementById('timeline');tl.innerHTML='';
+ PHASES.forEach((p,i)=>{const d=document.createElement('div');let k='tl';if(i<yi)k+=' done';else if(i===yi)k+=' now';else k+=' future';d.className=k;d.innerHTML=`<span class="n">${i+1}</span>`;tl.appendChild(d);});}
+function coCard(c,me,rk){const dead=!c.alive,lead=(rk===1&&c.alive);
+ return `<div class="co ${me?'you':''} ${dead?'dead':''} ${lead?'lead':''}">
+  <div class="name"><span>${c.nm} ${lead?'<span class="crown">♛首位</span>':''}<span class="rolelab">${c.role}</span></span>
+   ${dead?'<span class="badge-dead">倒産</span>':`<span class="rankchip ${rk===1?'r1':''}">${rk}位</span>`}</div>
+  <div class="metrics"><span class="k">累積利益</span><span class="v">${yen(c.profitCum)}</span>
+   <span class="k">資産規模</span><span class="v">${c.K.toFixed(0)}</span>
+   <span class="k">現金</span><span class="v">${yen(c.cash)}</span>
+   <span class="k">負債</span><span class="v">${c.debt.toFixed(0)}</span></div></div>`;}
+function renderBoard(){const rk=ranks();document.getElementById('board').innerHTML=coCard(you,true,rk.get(you))+coCard(A,false,rk.get(A))+coCard(B,false,rk.get(B));}
+function renderHype(){const hz=document.getElementById('hypeZone');const rk=ranks();
+ const leader=[you,A,B].find(c=>rk.get(c)===1&&c.alive);let h='';
+ if(bDeadYear!==null && yi<=bDeadYear+1){
+   h=`<div class="hype shock">⚠ <b>衝撃：</b>業界首位を走っていた${B.nm}が経営破綻。取引先や銀行に影響が広がり、街の冷え込みに拍車がかかった。</div>`;
+ } else if(leader===B){
+   const v=[`積極出店の${B.nm}が業界首位。過去最高益を更新し、攻めの経営に称賛が集まる。`,
+            `${B.nm}、大型店を続々開業。「今こそ攻めどき」という空気が業界に広がる。`,
+            `地価上昇で含み益が膨らみ、借入で攻める${B.nm}の戦略が“正解”に見えている。`];
+   h=`<div class="hype gold">🏆 <b>業界の話題：</b>${v[Math.min(yi,v.length-1)]}</div>`;
+ } else if(leader===you){ h=`<div class="hype gold">🏆 <b>業界の話題：</b>あなたの${you.nm}が業界首位に立っている。</div>`;
+ } else if(leader===A){ h=`<div class="hype gold">🏆 <b>業界の話題：</b>堅実経営の${A.nm}が首位。派手さはないが着実に伸びている。</div>`;}
+ hz.innerHTML=h;}
+function indRow(t,tc,l,v,c){return `<div class="ind"><span class="lab"><span class="tagdot ${tc}">${t}</span>${l}</span><span class="val ${c||''}">${v}</span></div>`;}
+function renderIndicators(){const d=PHASES[yi],box=document.getElementById('indicators');let h='';
+ h+=indRow('実','tA','既存店売上（前年比）',d.existing,cls(d.existing));
+ h+=indRow('過','tB','地価（前年比）',d.land,cls(d.land));
+ h+=indRow('金','tC','政策金利',d.rateS,d.rN>=3?'warn':'');
+ h+=indRow('雇','tD','雇用の空気',d.unemp,(d.unemp.includes('減')||d.unemp.includes('消'))?'down':(d.unemp.includes('増')?'up':''));
+ if(showMore){h+=indRow('過','tB','株価収益率 PER',d.per,(parseInt(d.per)>=40)?'warn':'');
+   h+=indRow('果','tD','在庫',d.zaiko,(d.zaiko.includes('過剰')||d.zaiko.includes('積'))?'warn':'');}
+ box.innerHTML=h;
+ document.getElementById('moreBtn').textContent=showMore?'− 指標を閉じる':'＋ 指標を詳しく';
+ document.getElementById('news').innerHTML=`<span class="lbl">経済ニュース</span>${d.news}`;
+ document.getElementById('street').innerHTML=`<b>街の空気：</b>${d.street}`;
+ renderCharts();}
+function spark(series,zero,unit,color){
+ const w=250,h=52,pad=6,n=8;const xs=i=>pad+(w-2*pad)*i/(n-1);
+ const vals=series.slice(); const mn=Math.min(...vals,zero?0:Math.min(...vals)),mx=Math.max(...vals,zero?0:Math.max(...vals));
+ const rng=(mx-mn)||1;const ys=v=>h-pad-(h-2*pad)*(v-mn)/rng;
+ let pts=series.map((v,i)=>`${xs(i).toFixed(1)},${ys(v).toFixed(1)}`).join(' ');
+ let zeroline=zero?`<line x1="${pad}" y1="${ys(0).toFixed(1)}" x2="${w-pad}" y2="${ys(0).toFixed(1)}" stroke="#C9D1DA" stroke-width="1" stroke-dasharray="3 3"/>`:'';
+ let dots=series.map((v,i)=>`<circle cx="${xs(i).toFixed(1)}" cy="${ys(v).toFixed(1)}" r="2.4" fill="${color}"/>`).join('');
+ let last=`<text x="${w-2}" y="12" text-anchor="end" font-family="var(--mono)" font-size="11" font-weight="700" fill="${color}">${series[series.length-1]}${unit}</text>`;
+ return `<svg viewBox="0 0 ${w} ${h}" width="100%" height="${h}">${zeroline}<polyline points="${pts}" fill="none" stroke="${color}" stroke-width="2"/>${dots}${last}</svg>`;}
+function renderCharts(){const box=document.getElementById('charts');box.className='charts'+(showChart?' show':'');
+ document.getElementById('chartBtn').textContent=showChart?'グラフを閉じる':'推移をグラフで見る';
+ if(!showChart){box.innerHTML='';return;}
+ const upto=yi+1;
+ const eS=PHASES.slice(0,upto).map(p=>p.eN),lS=PHASES.slice(0,upto).map(p=>p.lN),rS=PHASES.slice(0,upto).map(p=>p.rN);
+ box.innerHTML=
+  `<div class="chartbox"><div class="ct">既存店売上（前年比 %）</div>${spark(eS,true,'%','#2F8F5B')}</div>
+   <div class="chartbox"><div class="ct">地価（前年比 %）</div>${spark(lS,true,'%','#C98A1B')}</div>
+   <div class="chartbox"><div class="ct">政策金利（%）</div>${spark(rS,false,'%','#1F4E79')}</div>`;}
+function renderFore(){const box=document.getElementById('fore');box.innerHTML='';const last=(yi===PHASES.length-1);
+ if(last){box.innerHTML='<div class="flabel">最終年です。今年の判断で締めくくりましょう。</div>';return;}
+ FORE_OPTS.forEach(o=>{const b=document.createElement('button');b.textContent=o;if(selFore===o)b.className='sel';b.onclick=()=>{selFore=o;renderFore();};box.appendChild(b);});}
+function renderStrats(){const box=document.getElementById('strats');box.innerHTML='';
+ STRATS.forEach(s=>{const d=document.createElement('div');d.className='strat'+(selStrat===s.id?' sel':'');
+  d.innerHTML=`<div class="top"><span class="nm">${s.nm}</span><span class="agg">${s.agg}</span></div><div class="desc">${s.desc}</div>`;
+  d.onclick=()=>{selStrat=s.id;renderStrats();renderPreview();document.getElementById('decide').disabled=false;};box.appendChild(d);});}
+function renderPreview(){const box=document.getElementById('preview');
+ if(selStrat===null){box.innerHTML='<h3>来季の見通し</h3><div class="prow"><span>方針を選ぶと、来季の負債・金利負担・現金・撤退ラインを表示します。</span></div>';return;}
+ const ph=PHASES[yi],c=previewCo(selStrat);
+ const iNow=c.debt*ph.rate,iUp=c.debt*(ph.rate+0.01);
+ const exitDebt=c.K*SOLV;                       // 担保割れの負債しきい値
+ const marginToExit=exitDebt-c.debt;            // これを負債が超えると（収縮期に）退場
+ const willBreach=ph.c && c.debt>exitDebt;      // 担保割れ判定は収縮期のみ
+ box.innerHTML=`<h3>この方針での来季の見通し</h3>
+  <div class="prow"><span>負債</span><span class="pv">${c.debt.toFixed(0)}</span></div>
+  <div class="prow"><span>金利負担（現行 ${(ph.rate*100).toFixed(2)}%）</span><span class="pv">${iNow.toFixed(1)}</span></div>
+  <div class="prow"><span>もし金利が+1%上がったら</span><span class="pv ${iUp-iNow>3?'danger':''}">${iUp.toFixed(1)}</span></div>
+  <div class="prow"><span>手元現金</span><span class="pv ${c.cash<15?'danger':''}">${yen(c.cash)}</span></div>
+  <div class="forcerow"><span>担保の<b>余力</b>（あと負債がいくら増えたら担保割れか）</span><span class="fv ${marginToExit<=0?'f-red':(marginToExit<20?'f-amber':'f-green')}">${marginToExit>=0?'+':''}${marginToExit.toFixed(0)}</span></div>
+  <div class="exitline"><b>撤退ライン（担保割れ）</b>：借入が <b>資産規模×${SOLV}＝${exitDebt.toFixed(0)}</b> を超えた状態で景気が後退に転じると、担保価値を借金が上回り、倒産します。${willBreach?'<span class="danger">　― いまの選択は、景気が後退に転じれば担保割れになる水準です。</span>':''} 手元現金が尽きても倒産します。</div>`;}
+function renderAll(){document.getElementById('yearBadge').textContent=`${yi+1}年目 / 全8年`;
+ renderTimeline();renderBoard();renderHype();renderIndicators();renderFore();renderStrats();renderPreview();
+ document.getElementById('decide').disabled=(selStrat===null);}
+function advance(){const ph=PHASES[yi];
+ youPlan.push(selStrat);
+ if(yi<PHASES.length-1){const hit=(selFore&&FORE_KEY[selFore]===ph.fc);if(hit)foreHits++;
+   foreLog.push({guess:selFore||'—',actual:ph.fc,hit});}
+ const {profit,bJust}=worldStep(selStrat);
+ const rz=document.getElementById('resultZone');let msg='';
+ if(bJust){msg+=`<div class="result cold"><h2>${yi+1}年目 ― ${B.nm}が経営破綻</h2>
+   <p>首位を走っていた${B.nm}が、過熱期に抱えた借入を返せず、担保割れで倒産しました。<b>その破綻が取引先や銀行に波及し、翌年の景気をいっそう冷え込ませます。</b>「今いちばん勝っている」ことは「正しい」ことを意味しませんでした。</p></div>`;}
+ if(!you.alive){msg+=`<div class="result cold"><h2>${yi+1}年目 ― ${you.nm}が倒産</h2>
+   <p>借金が担保価値を上回り、資金繰りが行き詰まりました。景気を当てることよりも、<b>どんな局面でも倒れない体力を保つこと</b>が、生死を分けました。</p></div>`;}
+ else{const note=ph.c?"需要が冷え込み、金利負担が重い。閉店・人員削減の連鎖で、街はさらに冷えていく。"
+   :(ph.T>0.7?"実需に支えられた伸び。攻めた百貨店が売り場を広げ、控えた百貨店は差をつけられた。"
+             :"地価が先行し、既存店の実績は伴っていない。借入で大型店に張った百貨店は、負債を抱え込む。");
+  msg+=`<div class="result ${ph.c?'cold':'grow'}"><h2>${yi+1}年目の結果</h2>
+   <p>今年の損益：<span class="delta ${profit>=0?'up':'down'}">${profit>=0?'+':''}${profit.toFixed(1)}</span>　／　累積利益：<span class="delta">${yen(you.profitCum)}</span></p>
+   <p>${note}</p></div>`;}
+ rz.innerHTML=msg;
+ yi++;selStrat=null;selFore=null;showMore=false;
+ if(yi>=PHASES.length||!you.alive){renderTimeline();renderBoard();renderHype();finish();return;}
+ renderAll();window.scrollTo({top:0,behavior:'smooth'});}
+function finish(){document.getElementById('playZone').style.display='none';
+ let perf=0,health=0;
+ if(you.alive){const ratio=you.profitCum/Math.max(1,A.profitCum);perf=Math.max(0,Math.min(40,Math.round(ratio*38)));
+  const solv=(you.K*SOLV-you.debt)/Math.max(1,you.K*SOLV),cashM=Math.min(1,you.cash/30);
+  health=Math.round(Math.max(0,Math.min(40,(solv*0.55+cashM*0.45)*52)));}
+ const fore=Math.round(foreHits/7*20),total=Math.min(100,perf+health+fore);
+ let verdict,vcls;
+ if(!you.alive){verdict=`倒産。序盤の勢いより、どんな局面でも倒れない体力を優先すべきでした。派手に伸びた${B.nm}と同じ末路です。`;vcls="cold-bg";}
+ else if(total>=90){verdict=`お手本の${A.nm}を上回り、財務も健全。実需の好況で攻め、過熱で引き、不況を乗り切った——理想的な舵取りです。`;vcls="grow-bg";}
+ else if(you.profitCum<A.profitCum*0.5){verdict="生き延びたものの、好況で攻めきれず売り場を奪われ、利益で大きく劣後しました。臆病もまた負け筋です。";vcls="over-bg";}
+ else{verdict="堅実に生存。局面に応じた舵取りができていました。攻めどころをさらに見極めれば、伸びしろがあります。";vcls="grow-bg";}
+ let rev='<table class="rvtable"><tr><th>年</th>'+PHASES.map((p,i)=>`<td>${i+1}</td>`).join('')+'</tr><tr><th>実際の局面</th>'+INTERNAL.map(x=>`<td>${x}</td>`).join('')+'</tr></table>';
+ // 診断の的中表
+ let dg='<table class="rvtable"><tr><th>年</th>'+foreLog.map((f,i)=>`<td>${i+1}</td>`).join('')+'</tr>'
+   +'<tr><th>あなたの見通し</th>'+foreLog.map(f=>`<td>${f.guess==='—'?'—':f.guess.replace('さらに','')}</td>`).join('')+'</tr>'
+   +'<tr><th>実際</th>'+foreLog.map(f=>`<td>${f.actual}</td>`).join('')+'</tr>'
+   +'<tr><th>的中</th>'+foreLog.map(f=>`<td>${f.guess==='—'?'—':(f.hit?'<span style="color:var(--grow);font-weight:800">○</span>':'<span style="color:var(--cold)">×</span>')}</td>`).join('')+'</tr></table>';
+ // A社との戦略比較表
+ const short={1:'守',2:'丈',3:'借',4:'全'};
+ let cmpS='<table class="rvtable"><tr><th>年</th>'+youPlan.map((s,i)=>`<td>${i+1}</td>`).join('')+'</tr>'
+   +`<tr><th>あなた</th>`+youPlan.map(s=>`<td>${short[s]||'―'}</td>`).join('')+'</tr>'
+   +`<tr><th>${A.nm}</th>`+youPlan.map((s,i)=>`<td>${short[A_PLAN[i]]}</td>`).join('')+'</tr>'
+   +`<tr><th>違い</th>`+youPlan.map((s,i)=>`<td>${s===A_PLAN[i]?'':'<span style="color:var(--over);font-weight:800">≠</span>'}</td>`).join('')+'</tr></table>';
+ const fz=document.getElementById('finalZone');
+ fz.innerHTML=`<div class="final"><h2>8年の航海、終了</h2><div class="sub">最終スコア</div>
+  <div class="scorebig">${total}<span style="font-size:18px;color:var(--muted)"> / 100</span></div>
+  <div class="scoreparts">
+   <div class="sp"><div class="spv">${perf}</div><div class="spk">業績（${A.nm}対比の累積利益）/40</div></div>
+   <div class="sp"><div class="spv">${health}</div><div class="spk">財務の健全性（向こう数年の耐性）/40</div></div>
+   <div class="sp"><div class="spv">${fore}</div><div class="spk">見通し（${foreHits}/7的中）/20</div></div></div>
+  <div class="verdict" style="background:var(--${vcls})">${verdict}</div>
+  <div class="reveal"><h3>種明かし：各年は実はこういう局面でした</h3>${rev}
+   <p style="font-size:12px;color:var(--muted);margin-top:8px">見通しの的中が低くても、それが普通です——それがこのゲームの要点。<b>未来は読めない。大事なのは、外れても倒れなかったこと</b>です。</p></div>
+  <div class="reveal"><h3>あなたの見通しは当たっていたか</h3>${dg}</div>
+  <div class="reveal"><h3>${A.nm}（堅実）との判断の違い（守=守り・現金化／丈=身の丈／借=借入拡張／全=全力・大型一括）</h3>${cmpS}
+   <p style="font-size:12px;color:var(--muted);margin-top:8px">≠ の年が、あなたと堅実経営との分かれ道です。どこで攻め、どこで守ったかを見比べてみましょう。</p></div>
+  <table class="cmp"><tr><th>　</th><th>${you.nm}（あなた）</th><th>${A.nm}（堅実）</th><th>${B.nm}（積極）</th></tr>
+   <tr><td>結末</td><td>${you.alive?'生存':'倒産'}</td><td>${A.alive?'生存':'倒産'}</td><td>${B.alive?'生存':'倒産'}</td></tr>
+   <tr><td>累積利益</td><td class="v">${yen(you.profitCum)}</td><td class="v">${A.alive?yen(A.profitCum):'―'}</td><td class="v">${B.alive?yen(B.profitCum):'―'}</td></tr></table>
+  <button class="btn" style="margin-top:16px" onclick="location.reload()">もう一度プレイする</button></div>`;
+ fz.scrollIntoView({behavior:'smooth'});}
+document.getElementById('moreBtn').onclick=()=>{showMore=!showMore;renderIndicators();};
+document.getElementById('chartBtn').onclick=()=>{showChart=!showChart;renderCharts();};
+document.getElementById('decide').onclick=advance;
+renderAll();
+</script>
+</body>
+</html>
